@@ -34,9 +34,9 @@ exactMatches (x:xs) (y:ys)
 
 -- For each peg in xs, count how many times is occurs in ys
 countColors :: Code -> [Int]
-countColors code = countHelper colors code
+countColors code = countHelper colors
     where
-        countHelper :: [Peg] -> [Peg] -> [Int]
+        countHelper :: [Peg] -> [Int]
         countHelper [] = []
         countHelper (x:xs) = (length $ filter (==x) code):countHelper xs
 
@@ -66,9 +66,7 @@ getMove xs ys =  Move ys exact nonExact
 -- Exercise 4 -----------------------------------------
 
 isConsistent :: Move -> Code -> Bool
-isConsistent move code =
-    let Move guess _ _ = move
-    in getMove code guess == move
+isConsistent mv@(Move guess _ _) code = getMove code guess == mv
 
 -- Exercise 5 -----------------------------------------
 
