@@ -24,11 +24,10 @@ colors = [Red, Green, Blue, Yellow, Orange, Purple]
 
 -- Get the number of exact matches between the actual code and the guess
 exactMatches :: Code -> Code -> Int
-exactMatches [] [] = 0
 exactMatches [] _ = 0
 exactMatches _ [] = 0
 exactMatches (x:xs) (y:ys)
-    | x == y = 1 + exactMatches xs ys
+    | x == y    = 1 + exactMatches xs ys
     | otherwise = exactMatches xs ys
 
 -- Exercise 2 -----------------------------------------
@@ -36,9 +35,10 @@ exactMatches (x:xs) (y:ys)
 -- For each peg in xs, count how many times is occurs in ys
 countColors :: Code -> [Int]
 countColors code = countHelper colors code
-    where countHelper :: [Peg] -> [Peg] -> [Int]
-          countHelper [] _ = []
-          countHelper (x:xs) l = (length $ filter (==x) l):countHelper xs l
+    where
+        countHelper :: [Peg] -> [Peg] -> [Int]
+        countHelper [] = []
+        countHelper (x:xs) = (length $ filter (==x) code):countHelper xs
 
 
 -- Count number of matches between the actual code and the guess
@@ -48,26 +48,27 @@ matches xl yl = let countX = countColors xl
                 in go 0 countX countY
                     where
                       go :: Int -> [Int] -> [Int] -> Int
-                      go cnt [] [] = cnt
                       go cnt [] _ = cnt
                       go cnt _ [] = cnt
                       go cnt (x:xs) (y:ys) = go (cnt + (min x y)) xs ys
+
+-- matches x y = sum $ map (uncurry min) $ zip (countColors x) (countColors y)
 
 -- Exercise 3 -----------------------------------------
 
 -- Construct a Move from a guess given the actual code
 getMove :: Code -> Code -> Move
-getMove xs ys =  Move ys exact (matched - exact)
+getMove xs ys =  Move ys exact nonExact
     where
         exact = exactMatches xs ys
-        matched =  matches xs ys
+        nonExact =  (matches xs ys) - exact
 
 -- Exercise 4 -----------------------------------------
 
 isConsistent :: Move -> Code -> Bool
 isConsistent move code =
-    let Move guess _ _ = move in
-    getMove code guess == move
+    let Move guess _ _ = move
+    in getMove code guess == move
 
 -- Exercise 5 -----------------------------------------
 
