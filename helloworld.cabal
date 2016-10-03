@@ -17,8 +17,15 @@ library
   hs-source-dirs:      src
                      , HW01
                      , HW02
+                     , HW03
+                     , HW04
+                     , HW05
   exposed-modules:     Lib
   build-depends:       base >= 4.7 && < 5
+                     , aeson
+                     , text
+                     , bytestring
+                     , containers
   default-language:    Haskell2010
 
 executable helloworld-exe
